@@ -18,5 +18,7 @@ class SmokeTest(unittest.TestCase):
             manifest = TaskOrchestrator(output_dir=tmp_path / "workspace").create_task(source)
 
             self.assertTrue(manifest.source.is_local_file)
+            self.assertEqual(manifest.source.location, str(sample.resolve()))
             self.assertEqual(manifest.state, TaskState.ANALYZING)
-            self.assertTrue((tmp_path / "workspace" / "sample").exists())
+            self.assertTrue(manifest.output_dir.exists())
+            self.assertEqual(manifest.output_dir.parent, tmp_path / "workspace")
