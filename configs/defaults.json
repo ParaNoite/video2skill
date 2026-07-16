@@ -1,0 +1,12 @@
+{
+  "project_name": "Video2Skill",
+  "processing": {
+    "default_output_format": ["markdown", "docx", "skill"],
+    "local_first": true
+  },
+  "quality": {
+    "subtitle_threshold": 0.8,
+    "skill_threshold": 0.65
+  }
+}
+
