@@ -18,6 +18,8 @@ class ArchitectureContractTest(unittest.TestCase):
         self.assertIn("task_id", {field.name for field in fields(TaskManifest)})
         self.assertIn("source", {field.name for field in fields(TaskManifest)})
         self.assertIn("state", {field.name for field in fields(TaskManifest)})
+        self.assertIn("task_dir", {field.name for field in fields(TaskManifest)})
+        self.assertIn("cache_dir", {field.name for field in fields(TaskManifest)})
         self.assertIn("output_dir", {field.name for field in fields(TaskManifest)})
 
         self.assertIn("time_range", {field.name for field in fields(EvidenceUnit)})

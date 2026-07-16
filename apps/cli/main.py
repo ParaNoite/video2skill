@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 import argparse
-import json
-from dataclasses import asdict
 from pathlib import Path
 
-from core.contracts import SourceDescriptor, TaskManifest, TaskState
+from adapters import inspect_source
+from core.contracts import SourceDescriptor
 from core.orchestrator import TaskOrchestrator
-from adapters.local_file.adapter import LocalFileAdapter
-from adapters.bilibili.adapter import BilibiliAdapter
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -19,14 +16,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def resolve_source(source: str) -> SourceDescriptor:
-    if BilibiliAdapter.can_handle(source):
-        return BilibiliAdapter.inspect(source)
-    path = Path(source)
-    if path.exists():
-        return LocalFileAdapter.inspect(path)
-    if source.startswith(("http://", "https://")):
-        raise ValueError("Only Bilibili URLs are supported in this MVP")
-    raise FileNotFoundError(path)
+    return inspect_source(source)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -38,10 +28,9 @@ def main(argv: list[str] | None = None) -> int:
     orchestrator = TaskOrchestrator(output_dir=output_dir)
     manifest = orchestrator.create_task(source)
 
-    manifest_path = output_dir / "task_manifest.json"
-    manifest_path.write_text(json.dumps(asdict(manifest), default=str, ensure_ascii=False, indent=2), encoding="utf-8")
+    manifest_path = manifest.task_dir / "task_manifest.json"
 
     print(f"task_id={manifest.task_id}")
-    print(f"state={manifest.state}")
+    print(f"state={manifest.state.value}")
     print(f"manifest={manifest_path}")
     return 0
