@@ -1,12 +1,23 @@
 {
   "project_name": "Video2Skill",
+  "platform": "windows",
+  "entrypoints": {
+    "cli": true,
+    "local_web": true,
+    "desktop_shell": false
+  },
+  "inputs": {
+    "local_file": true,
+    "bilibili": true
+  },
   "processing": {
-    "default_output_format": ["markdown", "docx", "skill"],
+    "default_output_format": ["markdown"],
     "local_first": true
   },
   "quality": {
     "subtitle_threshold": 0.8,
-    "skill_threshold": 0.65
+    "skill_threshold": 0.65,
+    "ocr_mode": "interface_only",
+    "asr_engine": "whisper.cpp"
   }
 }
-

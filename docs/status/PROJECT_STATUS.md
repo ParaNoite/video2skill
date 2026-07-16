@@ -1,16 +1,16 @@
 # Project Status
 
-Current phase: `A - requirements freeze and skeleton`
+Current phase: `A - architecture and constraints freeze`
 
 ## Done
 
 - repository scaffold created
 - base task and source models added
 - CLI bootstrap added
+- project spec and constraints frozen
 
 ## Next
 
-- platform inspection and subtitle branch
-- audio and ASR branch
-- evidence fusion and OCR branch
-
+- source inspection contract
+- subtitle / ASR branch
+- evidence fusion / output branch

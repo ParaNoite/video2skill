@@ -21,7 +21,12 @@ def build_parser() -> argparse.ArgumentParser:
 def resolve_source(source: str) -> SourceDescriptor:
     if BilibiliAdapter.can_handle(source):
         return BilibiliAdapter.inspect(source)
-    return LocalFileAdapter.inspect(Path(source))
+    path = Path(source)
+    if path.exists():
+        return LocalFileAdapter.inspect(path)
+    if source.startswith(("http://", "https://")):
+        raise ValueError("Only Bilibili URLs are supported in this MVP")
+    raise FileNotFoundError(path)
 
 
 def main(argv: list[str] | None = None) -> int:
