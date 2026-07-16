@@ -3,10 +3,9 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from adapters import inspect_source
 from core.contracts import SourceDescriptor
 from core.orchestrator import TaskOrchestrator
-from adapters.local_file.adapter import LocalFileAdapter
-from adapters.bilibili.adapter import BilibiliAdapter
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -17,14 +16,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def resolve_source(source: str) -> SourceDescriptor:
-    if BilibiliAdapter.can_handle(source):
-        return BilibiliAdapter.inspect(source)
-    path = Path(source)
-    if path.exists():
-        return LocalFileAdapter.inspect(path)
-    if source.startswith(("http://", "https://")):
-        raise ValueError("Only Bilibili URLs are supported in this MVP")
-    raise FileNotFoundError(path)
+    return inspect_source(source)
 
 
 def main(argv: list[str] | None = None) -> int:

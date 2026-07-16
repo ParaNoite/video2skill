@@ -17,6 +17,29 @@ class TaskState(StrEnum):
     FAILED = "FAILED"
 
 
+class SourceCapability(StrEnum):
+    LOCAL_MEDIA = "LOCAL_MEDIA"
+    REMOTE_REFERENCE = "REMOTE_REFERENCE"
+    NETWORK_REQUIRED = "NETWORK_REQUIRED"
+    PUBLIC_PLATFORM = "PUBLIC_PLATFORM"
+
+
+class SourceContractError(ValueError):
+    pass
+
+
+class UnsupportedSourceError(SourceContractError):
+    pass
+
+
+class SourceAccessError(SourceContractError):
+    pass
+
+
+class SourceAdapterDisabledError(SourceContractError):
+    pass
+
+
 @dataclass(slots=True)
 class SourceDescriptor:
     platform: str
@@ -24,6 +47,7 @@ class SourceDescriptor:
     title: str
     location: str
     is_local_file: bool
+    capabilities: tuple[SourceCapability, ...]
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -102,7 +126,6 @@ class AuditReport:
     decision: str
     notes: list[str] = field(default_factory=list)
 
-
 def _source_to_dict(source: SourceDescriptor) -> dict[str, Any]:
     return {
         "platform": source.platform,
@@ -110,6 +133,7 @@ def _source_to_dict(source: SourceDescriptor) -> dict[str, Any]:
         "title": source.title,
         "location": source.location,
         "is_local_file": source.is_local_file,
+        "capabilities": [capability.value for capability in source.capabilities],
         "metadata": source.metadata,
     }
 
@@ -142,6 +166,7 @@ def load_manifest(path: Path) -> TaskManifest:
         title=source_data["title"],
         location=source_data["location"],
         is_local_file=source_data["is_local_file"],
+        capabilities=tuple(SourceCapability(capability) for capability in source_data.get("capabilities", [])),
         metadata=source_data.get("metadata", {}),
     )
     return TaskManifest(
@@ -155,4 +180,3 @@ def load_manifest(path: Path) -> TaskManifest:
         artifacts=list(data.get("artifacts", [])),
         warnings=list(data.get("warnings", [])),
     )
-

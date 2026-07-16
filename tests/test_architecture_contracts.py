@@ -2,7 +2,15 @@ from dataclasses import fields
 from pathlib import Path
 import unittest
 
-from core.contracts import AuditReport, EvidenceUnit, KnowledgeUnit, SourceDescriptor, TaskManifest, TaskState
+from core.contracts import (
+    AuditReport,
+    EvidenceUnit,
+    KnowledgeUnit,
+    SourceCapability,
+    SourceDescriptor,
+    TaskManifest,
+    TaskState,
+)
 
 
 class ArchitectureContractTest(unittest.TestCase):
@@ -33,10 +41,11 @@ class ArchitectureContractTest(unittest.TestCase):
     def test_descriptor_is_path_safe(self) -> None:
         descriptor = SourceDescriptor(
             platform="local_file",
-            source_id="sample",
+            source_id="local_sample",
             title="sample",
-            location=str(Path("sample.mp4")),
+            location=str(Path("sample.mp4").resolve()),
             is_local_file=True,
+            capabilities=(SourceCapability.LOCAL_MEDIA,),
         )
         self.assertTrue(descriptor.is_local_file)
-
+        self.assertIn("capabilities", {field.name for field in fields(SourceDescriptor)})

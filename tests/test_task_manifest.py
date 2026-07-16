@@ -6,7 +6,7 @@ from tempfile import TemporaryDirectory
 
 from adapters.bilibili.adapter import BilibiliAdapter
 from apps.cli.main import main
-from core.contracts import SourceDescriptor, TaskManifest, TaskState, load_manifest, save_manifest
+from core.contracts import SourceCapability, SourceDescriptor, TaskManifest, TaskState, load_manifest, save_manifest
 from core.orchestrator import TaskOrchestrator
 
 
@@ -18,6 +18,7 @@ class TaskManifestTest(unittest.TestCase):
             title="sample",
             location=str(Path("sample.mp4")),
             is_local_file=True,
+            capabilities=(SourceCapability.LOCAL_MEDIA,),
             metadata={"suffix": ".mp4"},
         )
 
@@ -96,6 +97,7 @@ class TaskManifestTest(unittest.TestCase):
             self.assertEqual(loaded.cache_dir, manifest.cache_dir)
             self.assertEqual(loaded.output_dir, manifest.output_dir)
             self.assertEqual(loaded.source.platform, "local_file")
+            self.assertEqual(loaded.source.capabilities, (SourceCapability.LOCAL_MEDIA,))
             self.assertEqual(loaded.source.metadata, {"suffix": ".mp4"})
             self.assertEqual(loaded.completed_steps, ["inspect"])
             self.assertEqual(loaded.artifacts, [{"kind": "manifest"}])

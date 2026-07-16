@@ -18,10 +18,13 @@ class SmokeTest(unittest.TestCase):
             manifest = TaskOrchestrator(output_dir=tmp_path / "workspace").create_task(source)
 
             self.assertTrue(manifest.source.is_local_file)
+            self.assertEqual(manifest.source.location, str(sample.resolve()))
             self.assertEqual(manifest.state, TaskState.ANALYZING)
             self.assertTrue((tmp_path / "workspace" / "tasks" / manifest.task_id).exists())
             self.assertTrue((tmp_path / "workspace" / "cache" / manifest.task_id).exists())
             self.assertTrue((tmp_path / "workspace" / "output" / manifest.task_id).exists())
+            self.assertTrue(manifest.output_dir.exists())
+            self.assertEqual(manifest.output_dir.parent, tmp_path / "workspace" / "output")
 
             manifest_path = manifest.task_dir / "task_manifest.json"
             self.assertTrue(manifest_path.exists())
