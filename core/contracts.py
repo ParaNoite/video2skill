@@ -16,6 +16,29 @@ class TaskState(StrEnum):
     FAILED = "FAILED"
 
 
+class SourceCapability(StrEnum):
+    LOCAL_MEDIA = "LOCAL_MEDIA"
+    REMOTE_REFERENCE = "REMOTE_REFERENCE"
+    NETWORK_REQUIRED = "NETWORK_REQUIRED"
+    PUBLIC_PLATFORM = "PUBLIC_PLATFORM"
+
+
+class SourceContractError(ValueError):
+    pass
+
+
+class UnsupportedSourceError(SourceContractError):
+    pass
+
+
+class SourceAccessError(SourceContractError):
+    pass
+
+
+class SourceAdapterDisabledError(SourceContractError):
+    pass
+
+
 @dataclass(slots=True)
 class SourceDescriptor:
     platform: str
@@ -23,6 +46,7 @@ class SourceDescriptor:
     title: str
     location: str
     is_local_file: bool
+    capabilities: tuple[SourceCapability, ...]
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -72,4 +96,3 @@ class AuditReport:
     uncertain_items: int
     decision: str
     notes: list[str] = field(default_factory=list)
-
