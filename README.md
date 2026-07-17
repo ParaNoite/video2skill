@@ -34,7 +34,8 @@ Key docs:
 - `docs/design/ARCHITECTURE.md`
 - `docs/design/CONSTRAINTS.md`
 - `docs/design/SOURCE_INSPECTION.md`
-- `docs/design/FEATURE_BRANCH_SPEC.md`
+- `docs/design/BRANCH_MAP.md` for the mainline execution order
+- `docs/design/FEATURE_BRANCH_SPEC.md` for the workstream contract details
 
 ## Quick start
 

@@ -1,22 +1,23 @@
-# Video2Skill Feature Branch Spec
+# Video2Skill Workstream Spec
 
-This document defines what each planned branch is for, what it accepts, what it
-produces, and what it must not do.
+This document defines what each planned workstream is for, what it accepts,
+what it produces, and what it must not do. All of it is intended to land on
+`main` in the order described in `BRANCH_MAP.md`.
 
 ## Shared rules
 
-- Every feature branch must stay within the core contract layer.
-- Every branch must define its own inputs, outputs, and non-goals before code
+- Every workstream must stay within the core contract layer.
+- Every workstream must define its own inputs, outputs, and non-goals before code
   lands.
-- Each branch must be independently testable.
-- Branches must not introduce a new source of truth for task state, evidence,
+- Each workstream must be independently testable.
+- Workstreams must not introduce a new source of truth for task state, evidence,
   or knowledge.
 - High-risk text such as commands, paths, and version numbers must remain
   evidence-backed.
 
-## Branch-by-branch spec
+## Workstream-by-workstream spec
 
-### `feature/source-contract`
+### `source-contract`
 
 Purpose:
 - Freeze the source inspection contract.
@@ -38,7 +39,7 @@ Must not do:
 - Download media.
 - Create task workspaces.
 
-### `feature/task-manifest`
+### `task-manifest`
 
 Purpose:
 - Define task lifecycle and workspace boundaries.
@@ -60,7 +61,7 @@ Must not do:
 - Parse media.
 - Render final content.
 
-### `feature/local-file-ingest`
+### `local-file-ingest`
 
 Purpose:
 - Make local-file input enter the pipeline cleanly.
@@ -79,7 +80,7 @@ Must do:
 Must not do:
 - Add platform-specific parsing logic.
 
-### `feature/bilibili-adapter`
+### `bilibili-adapter`
 
 Purpose:
 - Define the Bilibili adapter boundary and required local media handoff.
@@ -105,7 +106,7 @@ Must not do:
 - Save cookies, tokens, or authorization material.
 - Silently continue with only a remote URL when local video download fails.
 
-### `feature/asr-whispercpp`
+### `asr-whispercpp`
 
 Purpose:
 - Reserve the offline ASR path.
@@ -125,7 +126,7 @@ Must do:
 Must not do:
 - Depend on commercial APIs for the primary path.
 
-### `feature/ocr-contract`
+### `ocr-contract`
 
 Purpose:
 - Define OCR interfaces and evidence payloads.
@@ -142,7 +143,7 @@ Must do:
 Must not do:
 - Bind the project to one OCR engine in the contract layer.
 
-### `feature/evidence-fusion`
+### `evidence-fusion`
 
 Purpose:
 - Merge transcript, OCR, and source metadata into a unified evidence timeline.
@@ -164,7 +165,7 @@ Must do:
 Must not do:
 - Invent new facts.
 
-### `feature/knowledge-render`
+### `knowledge-render`
 
 Purpose:
 - Turn vetted evidence into structured knowledge and Markdown output.
@@ -184,7 +185,7 @@ Must do:
 Must not do:
 - Emit unverified commands or steps as facts.
 
-### `feature/audit-policy`
+### `audit-policy`
 
 Purpose:
 - Define what passes review and what stays flagged.
@@ -206,7 +207,7 @@ Must do:
 Must not do:
 - Auto-promote weak evidence into final output.
 
-### `feature/local-web-entry`
+### `local-web-entry`
 
 Purpose:
 - Define the local web entry surface.
@@ -226,7 +227,7 @@ Must do:
 Must not do:
 - Become a second business-logic implementation.
 
-### `feature/contract-tests`
+### `contract-tests`
 
 Purpose:
 - Lock the contracts and prevent regressions.
@@ -240,22 +241,22 @@ Outputs:
 - Regression checks.
 
 Must do:
-- Verify each branch-level contract independently.
+- Verify each workstream-level contract independently.
 - Protect the shared schema and lifecycle rules.
 
 Must not do:
 - Test implementation internals that are not contract-relevant.
 
-## Recommended branch sequence
+## Recommended execution sequence
 
-1. `feature/source-contract`
-2. `feature/task-manifest`
-3. `feature/local-file-ingest`
-4. `feature/bilibili-adapter`
-5. `feature/asr-whispercpp`
-6. `feature/ocr-contract`
-7. `feature/evidence-fusion`
-8. `feature/knowledge-render`
-9. `feature/audit-policy`
-10. `feature/local-web-entry`
-11. `feature/contract-tests`
+1. `source-contract`
+2. `task-manifest`
+3. `local-file-ingest`
+4. `bilibili-adapter`
+5. `asr-whispercpp`
+6. `ocr-contract`
+7. `evidence-fusion`
+8. `knowledge-render`
+9. `audit-policy`
+10. `local-web-entry`
+11. `contract-tests`

@@ -12,5 +12,5 @@ Current phase: `A - architecture and constraints freeze`
 
 ## Next
 
-- subtitle / ASR branch
-- evidence fusion / output branch
+- subtitle / ASR workstream on `main`
+- evidence fusion / output workstream on `main`
