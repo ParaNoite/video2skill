@@ -50,7 +50,6 @@ class SourceDescriptor:
     capabilities: tuple[SourceCapability, ...]
     metadata: dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass(slots=True)
 class TaskManifest:
     task_id: str

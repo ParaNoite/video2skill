@@ -2,6 +2,7 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+from adapters.bilibili.adapter import BilibiliAdapter
 from adapters.local_file.adapter import LocalFileAdapter
 from core.contracts import TaskState, load_manifest
 from core.orchestrator import TaskOrchestrator
@@ -29,3 +30,9 @@ class SmokeTest(unittest.TestCase):
             manifest_path = manifest.task_dir / "task_manifest.json"
             self.assertTrue(manifest_path.exists())
             self.assertEqual(load_manifest(manifest_path).task_id, manifest.task_id)
+
+    def test_bilibili_source_is_inspected_without_network(self) -> None:
+        source = BilibiliAdapter.inspect("BV1xx411c7mD")
+
+        self.assertEqual(source.platform, "bilibili")
+        self.assertFalse(source.is_local_file)
