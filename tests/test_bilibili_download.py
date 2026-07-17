@@ -29,7 +29,7 @@ def tool_lookup(tool_name: str) -> str | None:
 
 
 class BilibiliDownloadTest(unittest.TestCase):
-    def test_downloader_writes_source_video_artifact_to_manifest(self) -> None:
+    def test_downloader_stages_url_as_local_video_and_records_artifact(self) -> None:
         with TemporaryDirectory() as tmp:
             workspace = Path(tmp) / "workspace"
             source = BilibiliAdapter.inspect("https://www.bilibili.com/video/BV1Q5411W7RE")
@@ -53,7 +53,8 @@ class BilibiliDownloadTest(unittest.TestCase):
             self.assertEqual(artifact["canonical_url"], source.location)
             self.assertEqual(artifact["tool"], "yt-dlp")
             self.assertEqual(artifact["format_policy"], "best_mp4")
-            self.assertEqual(Path(artifact["path"]), manifest.task_dir / "artifacts" / "source_video.mp4")
+            self.assertEqual(Path(artifact["path"]), manifest.cache_dir / "staging" / "source_video.mp4")
+            self.assertTrue(Path(artifact["path"]).is_file())
             self.assertEqual(manifest.artifacts, [artifact])
             self.assertIn("download_source_video", manifest.completed_steps)
 
@@ -132,7 +133,8 @@ class BilibiliDownloadTest(unittest.TestCase):
             )
             loaded = load_manifest(manifest_path)
 
-            self.assertEqual(source_video_path, loaded.task_dir / "artifacts" / "source_video.mp4")
+            self.assertEqual(source_video_path, loaded.cache_dir / "staging" / "source_video.mp4")
+            self.assertTrue(source_video_path.is_file())
             self.assertEqual(loaded.artifacts[0]["path"], str(source_video_path))
             self.assertIn("download_source_video", loaded.completed_steps)
 

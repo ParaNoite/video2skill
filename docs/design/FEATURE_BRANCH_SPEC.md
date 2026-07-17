@@ -90,13 +90,13 @@ Inputs:
 Outputs:
 - Adapter capability result.
 - Normalized source descriptor or explicit refusal.
-- Required local `source_video` artifact for task execution.
+- Required local `source_video` artifact staged under the task cache directory.
 
 Must do:
 - Allow the adapter to be disabled.
 - Return clear unsupported/blocked responses.
 - Keep source inspection metadata-only and side-effect free.
-- Download public Bilibili sources into the task artifact directory after task creation.
+- Download public Bilibili sources into the task cache staging directory after task creation.
 - Record the downloaded MP4 in `TaskManifest.artifacts`.
 
 Must not do:

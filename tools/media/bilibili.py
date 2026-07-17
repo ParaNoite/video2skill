@@ -12,6 +12,7 @@ FORMAT_POLICY = "best_mp4"
 FORMAT_SELECTOR = "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/best"
 ARTIFACT_KIND = "source_video"
 ARTIFACT_FILE_NAME = "source_video.mp4"
+STAGING_DIR_NAME = "staging"
 
 
 class BilibiliDownloadError(RuntimeError):
@@ -54,10 +55,10 @@ def download_source_video(
     downloader_path = _require_tool(downloader, "download Bilibili videos")
     _require_tool("ffmpeg", "merge Bilibili video and audio streams")
 
-    artifact_dir = manifest.task_dir / "artifacts"
-    artifact_dir.mkdir(parents=True, exist_ok=True)
-    output_path = artifact_dir / ARTIFACT_FILE_NAME
-    output_template = artifact_dir / "source_video.%(ext)s"
+    staging_dir = manifest.cache_dir / STAGING_DIR_NAME
+    staging_dir.mkdir(parents=True, exist_ok=True)
+    output_path = staging_dir / ARTIFACT_FILE_NAME
+    output_template = staging_dir / "source_video.%(ext)s"
 
     command = [
         downloader_path,

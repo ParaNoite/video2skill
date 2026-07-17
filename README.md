@@ -43,5 +43,5 @@ python -m apps.cli --source .\sample.mp4
 ```
 
 Bilibili sources require the `yt-dlp` CLI and `ffmpeg` on `PATH`. Public videos
-are downloaded into the task artifact directory as `source_video.mp4` before the
-task can continue.
+are downloaded into the task cache staging directory as `source_video.mp4` and
+recorded in the task manifest artifacts before the task can continue.
