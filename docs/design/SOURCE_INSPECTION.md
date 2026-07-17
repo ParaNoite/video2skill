@@ -37,5 +37,7 @@ Blocking failures raise `SourceContractError` subclasses:
 
 - Adapters do not create tasks.
 - The CLI creates a task only after inspection returns a `SourceDescriptor`.
-- Bilibili inspection is currently metadata-only and must not require network access.
+- Bilibili inspection is metadata-only and must not require network access.
+- Bilibili task execution must download a public source video into the task artifact directory after task creation.
+- Bilibili download failures are blocking failures and must not silently downgrade to a remote-only reference.
 - Missing local paths and directories are blocking failures.
