@@ -82,7 +82,7 @@ Must not do:
 ### `feature/bilibili-adapter`
 
 Purpose:
-- Define the Bilibili adapter boundary.
+- Define the Bilibili adapter boundary and required local media handoff.
 
 Inputs:
 - Bilibili URL.
@@ -90,14 +90,20 @@ Inputs:
 Outputs:
 - Adapter capability result.
 - Normalized source descriptor or explicit refusal.
+- Required local `source_video` artifact staged under the task cache directory.
 
 Must do:
 - Allow the adapter to be disabled.
 - Return clear unsupported/blocked responses.
+- Keep source inspection metadata-only and side-effect free.
+- Download public Bilibili sources into the task cache staging directory after task creation.
+- Record the downloaded MP4 in `TaskManifest.artifacts`.
 
 Must not do:
 - Bypass access control.
 - Persist credentials.
+- Save cookies, tokens, or authorization material.
+- Silently continue with only a remote URL when local video download fails.
 
 ### `feature/asr-whispercpp`
 

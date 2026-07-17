@@ -6,7 +6,7 @@ and Markdown technical docs.
 ## Current scope
 
 - task manifest and lifecycle model
-- local-file and Bilibili source contracts
+- local-file source contracts and Bilibili public-video download handoff
 - evidence, knowledge, and audit core models
 - CLI bootstrap for creating a task workspace
 - architecture and constraint documents
@@ -41,3 +41,7 @@ Key docs:
 ```bash
 python -m apps.cli --source .\sample.mp4
 ```
+
+Bilibili sources require the `yt-dlp` CLI and `ffmpeg` on `PATH`. Public videos
+are downloaded into the task cache staging directory as `source_video.mp4` and
+recorded in the task manifest artifacts before the task can continue.
