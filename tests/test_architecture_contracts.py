@@ -2,7 +2,15 @@ from dataclasses import fields
 from pathlib import Path
 import unittest
 
-from core.contracts import AuditReport, EvidenceUnit, KnowledgeUnit, SourceDescriptor, TaskManifest, TaskState
+from core.contracts import (
+    AuditReport,
+    EvidenceUnit,
+    KnowledgeUnit,
+    SourceDescriptor,
+    SourceInspection,
+    TaskManifest,
+    TaskState,
+)
 
 
 class ArchitectureContractTest(unittest.TestCase):
@@ -21,6 +29,11 @@ class ArchitectureContractTest(unittest.TestCase):
 
         self.assertIn("coverage", {field.name for field in fields(AuditReport)})
         self.assertIn("decision", {field.name for field in fields(AuditReport)})
+
+        self.assertIn("available", {field.name for field in fields(SourceInspection)})
+        self.assertIn("descriptor", {field.name for field in fields(SourceInspection)})
+        self.assertIn("warnings", {field.name for field in fields(SourceInspection)})
+        self.assertIn("reason", {field.name for field in fields(SourceInspection)})
 
     def test_supported_task_states(self) -> None:
         self.assertEqual(

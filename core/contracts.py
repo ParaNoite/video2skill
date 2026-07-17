@@ -27,6 +27,22 @@ class SourceDescriptor:
 
 
 @dataclass(slots=True)
+class SourceInspection:
+    available: bool
+    descriptor: SourceDescriptor | None = None
+    warnings: list[str] = field(default_factory=list)
+    reason: str | None = None
+
+    @classmethod
+    def ok(cls, descriptor: SourceDescriptor, warnings: list[str] | None = None) -> "SourceInspection":
+        return cls(available=True, descriptor=descriptor, warnings=warnings or [])
+
+    @classmethod
+    def unavailable(cls, reason: str, warnings: list[str] | None = None) -> "SourceInspection":
+        return cls(available=False, warnings=warnings or [], reason=reason)
+
+
+@dataclass(slots=True)
 class TaskManifest:
     task_id: str
     source: SourceDescriptor
