@@ -34,6 +34,7 @@ Key docs:
 - `docs/design/ARCHITECTURE.md`
 - `docs/design/CONSTRAINTS.md`
 - `docs/design/SOURCE_INSPECTION.md`
+- `docs/design/FEATURE_BRANCH_SPEC.md`
 
 ## Quick start
 

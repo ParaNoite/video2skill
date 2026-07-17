@@ -6,8 +6,8 @@ from core.contracts import (
     AuditReport,
     EvidenceUnit,
     KnowledgeUnit,
+    SourceCapability,
     SourceDescriptor,
-    SourceInspection,
     TaskManifest,
     TaskState,
 )
@@ -18,6 +18,8 @@ class ArchitectureContractTest(unittest.TestCase):
         self.assertIn("task_id", {field.name for field in fields(TaskManifest)})
         self.assertIn("source", {field.name for field in fields(TaskManifest)})
         self.assertIn("state", {field.name for field in fields(TaskManifest)})
+        self.assertIn("task_dir", {field.name for field in fields(TaskManifest)})
+        self.assertIn("cache_dir", {field.name for field in fields(TaskManifest)})
         self.assertIn("output_dir", {field.name for field in fields(TaskManifest)})
 
         self.assertIn("time_range", {field.name for field in fields(EvidenceUnit)})
@@ -30,11 +32,6 @@ class ArchitectureContractTest(unittest.TestCase):
         self.assertIn("coverage", {field.name for field in fields(AuditReport)})
         self.assertIn("decision", {field.name for field in fields(AuditReport)})
 
-        self.assertIn("available", {field.name for field in fields(SourceInspection)})
-        self.assertIn("descriptor", {field.name for field in fields(SourceInspection)})
-        self.assertIn("warnings", {field.name for field in fields(SourceInspection)})
-        self.assertIn("reason", {field.name for field in fields(SourceInspection)})
-
     def test_supported_task_states(self) -> None:
         self.assertEqual(
             [state.value for state in TaskState],
@@ -44,10 +41,11 @@ class ArchitectureContractTest(unittest.TestCase):
     def test_descriptor_is_path_safe(self) -> None:
         descriptor = SourceDescriptor(
             platform="local_file",
-            source_id="sample",
+            source_id="local_sample",
             title="sample",
-            location=str(Path("sample.mp4")),
+            location=str(Path("sample.mp4").resolve()),
             is_local_file=True,
+            capabilities=(SourceCapability.LOCAL_MEDIA,),
         )
         self.assertTrue(descriptor.is_local_file)
-
+        self.assertIn("capabilities", {field.name for field in fields(SourceDescriptor)})

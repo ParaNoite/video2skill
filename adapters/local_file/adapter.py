@@ -1,32 +1,37 @@
 from __future__ import annotations
 
+from hashlib import sha1
 from pathlib import Path
 
-from core.contracts import SourceDescriptor, SourceInspection
+from core.contracts import SourceAccessError, SourceCapability, SourceDescriptor
 
 
-SUPPORTED_VIDEO_SUFFIXES = {".mp4", ".mov", ".mkv", ".avi", ".webm", ".m4v"}
+def _source_id_for_path(path: Path) -> str:
+    digest = sha1(str(path).encode("utf-8")).hexdigest()[:12]
+    return f"local_{digest}"
 
 
 class LocalFileAdapter:
     @staticmethod
-    def inspect(path: Path) -> SourceInspection:
-        if not path.exists():
-            return SourceInspection.unavailable(f"Local file does not exist: {path}")
-        if not path.is_file():
-            return SourceInspection.unavailable(f"Local source is not a file: {path}")
+    def inspect(path: Path) -> SourceDescriptor:
+        try:
+            resolved = path.expanduser().resolve(strict=True)
+            if not resolved.is_file():
+                raise SourceAccessError(f"Local source is not a file: {path}")
+        except SourceAccessError:
+            raise
+        except OSError as exc:
+            raise SourceAccessError(f"Cannot access local source: {path}") from exc
 
-        suffix = path.suffix.lower()
-        warnings: list[str] = []
-        if suffix not in SUPPORTED_VIDEO_SUFFIXES:
-            warnings.append(f"Unrecognized video suffix: {suffix or '<none>'}")
-
-        descriptor = SourceDescriptor(
+        return SourceDescriptor(
             platform="local_file",
-            source_id=path.stem,
-            title=path.stem,
-            location=str(path.resolve()),
+            source_id=_source_id_for_path(resolved),
+            title=resolved.stem,
+            location=str(resolved),
             is_local_file=True,
-            metadata={"suffix": suffix},
+            capabilities=(SourceCapability.LOCAL_MEDIA,),
+            metadata={
+                "file_name": resolved.name,
+                "suffix": resolved.suffix.lower(),
+            },
         )
-        return SourceInspection.ok(descriptor, warnings=warnings)
