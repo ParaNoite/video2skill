@@ -60,6 +60,15 @@ class SourceContractTest(unittest.TestCase):
         )
         self.assertEqual(from_url.metadata["canonical_url"], from_url.location)
 
+    def test_bilibili_url_without_scheme_is_supported(self) -> None:
+        descriptor = inspect_source(
+            "bilibili.com/video/BV1bbGQ6tEdt/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click"
+        )
+
+        self.assertEqual(descriptor.platform, "bilibili")
+        self.assertEqual(descriptor.source_id, "bilibili_BV1bbGQ6tEdt")
+        self.assertEqual(descriptor.location, "https://www.bilibili.com/video/BV1bbGQ6tEdt")
+
     def test_unsupported_url_raises(self) -> None:
         with self.assertRaises(UnsupportedSourceError):
             inspect_source("https://example.com/video/123")
